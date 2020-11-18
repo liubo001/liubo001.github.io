@@ -164,6 +164,81 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-clu-Df" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/11/18/clu-Df/">clu-Df</a>
+    </h1>
+  
+
+        
+        
+<a href="/2020/11/18/clu-Df/" class="archive-article-date">
+  	<time datetime="2020-11-18T02:36:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-11-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <a id="more"></a>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">clc</span><br><span class="line">clear</span><br><span class="line">%一二三列分别为屈服位移Xy，极限位移Xu，屈服剪力Fy；</span><br><span class="line">%一二行为第二层边柱、中柱；</span><br><span class="line">%三四行为三到六层边柱中柱·</span><br><span class="line">data=[<span class="number">0.241</span> <span class="number">0.552</span> <span class="number">82</span>;<span class="number">0.202</span> <span class="number">0.463</span> <span class="number">164</span>;<span class="number">0.250</span> <span class="number">0.573</span> <span class="number">85</span>;<span class="number">0.211</span> <span class="number">0.483</span> <span class="number">171</span>];</span><br><span class="line">tou_drift=<span class="string">&#x27;Col_1_20_drift_&#x27;</span>;</span><br><span class="line">tou_globalforce=<span class="string">&#x27;Col_1_20_globalforce_&#x27;</span>;</span><br><span class="line">txt=<span class="string">&#x27;.txt&#x27;</span>;</span><br><span class="line">c=<span class="number">22</span>;%地震动条数</span><br><span class="line">%Eh_total=[];</span><br><span class="line">Df_total=[];</span><br><span class="line"><span class="keyword">for</span> i=<span class="number">1</span>:c</span><br><span class="line">%i=<span class="number">1</span>;</span><br><span class="line">    a=num2str(i);</span><br><span class="line">    fn_drift=[tou_drift a txt];</span><br><span class="line">    A=textread(fn_drift);%位移文件</span><br><span class="line">    fn_globalforce=[tou_globalforce a txt];</span><br><span class="line">    B=textread(fn_globalforce);%剪力文件</span><br><span class="line">    C=<span class="number">3600</span>*A(:,<span class="number">2</span>:end);%位移</span><br><span class="line">    E=[];</span><br><span class="line">    <span class="keyword">for</span> j=<span class="number">5</span>:<span class="number">6</span>:size(B,<span class="number">2</span>)</span><br><span class="line">        D=B(:,j);</span><br><span class="line">        E=[E,D];%剪力</span><br><span class="line">    end</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> k=<span class="number">1</span>:<span class="number">20</span></span><br><span class="line">        F=[C(:,k),E(:,k)];% 第一列为位移 第二列为力</span><br><span class="line">        Energry=calculation_Eh(F);</span><br><span class="line"><span class="string">        [m,n]</span>=size(Energry);</span><br><span class="line">        %Eh(k)=Energry(m,n);</span><br><span class="line">        Eh=Energry(m,n);</span><br><span class="line">        <span class="keyword">if</span> k==<span class="number">1</span>||k==<span class="number">4</span></span><br><span class="line">            Fy=data(<span class="number">1</span>,<span class="number">3</span>);</span><br><span class="line">            Xu=data(<span class="number">1</span>,<span class="number">2</span>);</span><br><span class="line">        elseif k==<span class="number">2</span>||k==<span class="number">3</span></span><br><span class="line">            Fy=data(<span class="number">2</span>,<span class="number">3</span>);</span><br><span class="line">            Xu=data(<span class="number">2</span>,<span class="number">2</span>);</span><br><span class="line">        elseif k==<span class="number">5</span>||k==<span class="number">8</span>||k==<span class="number">9</span>||k==<span class="number">12</span>||k==<span class="number">13</span>||k==<span class="number">16</span>||k==<span class="number">17</span>||k==<span class="number">20</span></span><br><span class="line">            Fy=data(<span class="number">3</span>,<span class="number">3</span>);</span><br><span class="line">            Xu=data(<span class="number">3</span>,<span class="number">2</span>);</span><br><span class="line">        elseif k==<span class="number">6</span>||k==<span class="number">7</span>||k==<span class="number">10</span>||k==<span class="number">11</span>||k==<span class="number">14</span>||k==<span class="number">15</span>||k==<span class="number">18</span>||k==<span class="number">19</span></span><br><span class="line">            Fy=data(<span class="number">4</span>,<span class="number">3</span>);</span><br><span class="line">            Xu=data(<span class="number">4</span>,<span class="number">2</span>);</span><br><span class="line">        end </span><br><span class="line">        Df(k)=abs(Eh/(Fy*Xu));</span><br><span class="line">    end</span><br><span class="line">    Df_total=[Df_total;Df];</span><br><span class="line">    %Eh_total=[Eh_total;Eh];</span><br><span class="line">    </span><br><span class="line">   %plot(C(:,j),E(:,j))</span><br><span class="line">end</span><br><span class="line">%xlswrite(<span class="string">&#x27;Eh_total.xls&#x27;</span>,Eh_total)</span><br><span class="line">xlswrite(<span class="string">&#x27;Clu_Df.xls&#x27;</span>,Df_total)</span><br></pre></td></tr></table></figure><link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">matlab</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/11/18/clu-Df/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-文件处理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -428,7 +503,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/默认分类//" class="article-tag-list-link color5">默认分类</a>
+        			<a href="/categories/code//" class="article-tag-list-link color5">code</a>
         		</li>
       		
 		</ul>
